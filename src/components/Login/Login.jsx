@@ -1,100 +1,59 @@
-import {
-  Fragment,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useState } from 'react';
 
-import {
-  Box,
-  Button,
-  Typography,
-} from '@mui/material';
-
-const Login = () => {
+const XLogin = () => {
   const [form, setForm] = useState({ username: "", password: "" });
-  const [error, setError] = useState(false);
-  const [login, setLogin] = useState(false);
+  const [message, setMessage] = useState("");
 
-  const validate = () => {
-    if (form.username !== "user") {
-      setError(true);
-      return false;
-    }
-    if (form.password !== "password") {
-      setError(true);
-      return false;
-    }
-    setError("");
-    return true;
-  };
-
-  const handleForm = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      setLogin(true);
-    }
-  };
-
-  const handleValue = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // setError(false);
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm({ ...form, [name]: value });
+    setMessage("");
   };
-  useEffect(() => {
-    const timeoutId = setTimeout(() => setError(false), 4000);
 
-    return () => clearTimeout(timeoutId);
-  }, [error]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { username, password } = form;
+  if (username === "user" && password === "password") {
+      setMessage("Welcome, user!");
+    } else {
+      setMessage("Invalid username or password");
+    }
+  };
 
   return (
-    <Fragment>
-      {!login ? (
-        <form onSubmit={handleForm}>
-          <Box display="flex" flexDirection="column" gap={2}>
-            {error && (
-              <Typography color="error" variant="body2">
-                Invalid Username and password
-              </Typography>
-            )}
-            <label htmlFor="username">UserName:</label>
-            <input
-              id="username"
-              name="username"
-              value={form.username}
-              onChange={handleValue}
-              required
-            />
-            <label htmlFor="password">Password:</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleValue}
-              required
-            />
-            <Button type="submit" variant="contained" color="primary">
-              Submit
-            </Button>
-          </Box>
-        </form>
-      ) : (
-        <Fragment>
-          <Typography variant="h5">Welcome, user!</Typography>
-          <Button
-            onClick={() => {
-              setLogin(false);
-              setForm({ username: "", password: "" });
-            }}
-            variant="contained"
-            color="primary"
-          >
-            Logout
-          </Button>
-        </Fragment>
-      )}
-    </Fragment>
+    <div style={{ maxWidth: "300px", margin: "0 auto", textAlign: "center" }}>
+      <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: "1rem" }}>
+          <label htmlFor="username">Username:</label>
+          <br />
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={form.username}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div style={{ marginBottom: "1rem" }}>
+          <label htmlFor="password">Password:</label>
+          <br />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={form.password}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <button type="submit" style={{ padding: "0.5rem 1rem" }}>
+          Submit
+        </button>
+      </form>
+      {message && <p style={{ marginTop: "1rem", color: "red" }}>{message}</p>}
+    </div>
   );
 };
 
-export default Login;
+export default XLogin;
