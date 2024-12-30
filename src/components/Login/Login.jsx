@@ -1,12 +1,12 @@
 import {
   Fragment,
+  useEffect,
   useState,
 } from 'react';
 
 import {
   Box,
   Button,
-  TextField,
   Typography,
 } from '@mui/material';
 
@@ -37,9 +37,14 @@ const Login = () => {
 
   const handleValue = (e) => {
     const { name, value } = e.target;
-    setError(false);
+    // setError(false);
     setForm((prev) => ({ ...prev, [name]: value }));
   };
+  useEffect(() => {
+    const timeoutId = setTimeout(() => setError(false), 4000);
+
+    return () => clearTimeout(timeoutId);
+  }, [error]);
 
   return (
     <Fragment>
@@ -51,24 +56,18 @@ const Login = () => {
                 Invalid Username and password
               </Typography>
             )}
-            <label htmlFor='username'>
-              UserName
-            </label>
-            <TextField
+            <label htmlFor="username">UserName:</label>
+            <input
               id="username"
               name="username"
-              label="Username"
-              variant="outlined"
               value={form.username}
               onChange={handleValue}
               required
             />
-            <label htmlFor="password">Password</label>
-            <TextField
+            <label htmlFor="password">Password:</label>
+            <input
               id="password"
               name="password"
-              label="Password"
-              variant="outlined"
               type="password"
               value={form.password}
               onChange={handleValue}
@@ -79,9 +78,19 @@ const Login = () => {
             </Button>
           </Box>
         </form>
-      ) : (<Fragment>
-        <Typography variant="h5">Welcome, user!</Typography>
-        <Button onClick={()=>{setLogin(false) ;setForm({username:"",password:""})}}  variant="contained" color="primary">Back To login</Button>
+      ) : (
+        <Fragment>
+          <Typography variant="h5">Welcome, user!</Typography>
+          <Button
+            onClick={() => {
+              setLogin(false);
+              setForm({ username: "", password: "" });
+            }}
+            variant="contained"
+            color="primary"
+          >
+            Logout
+          </Button>
         </Fragment>
       )}
     </Fragment>
